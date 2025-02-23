@@ -6,15 +6,27 @@
   "type": "module",
   "scripts": {
     "dev": "vinxi dev",
-        "build": "vinxi build",
-        "start": "vinxi start",
+    "build": "vinxi build",
+    "start": "vinxi start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "japheth kiptoo",
   "license": "ISC",
   "dependencies": {
+    "@radix-ui/react-slot": "^1.1.2",
+    "@tailwindcss/postcss": "^4.0.8",
     "@tanstack/react-router": "^1.109.2",
     "@tanstack/start": "^1.111.2",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.475.0",
+    "postcss": "^8.5.3",
+    "tailwind-merge": "^3.0.2",
+    "tailwindcss": "^4.0.8",
+    "tailwindcss-animate": "^1.0.7",
     "vinxi": "^0.5.3"
+  },
+  "devDependencies": {
+    "vite-tsconfig-paths": "^5.1.4"
   }
 }

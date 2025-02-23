@@ -1,12 +1,19 @@
 import { HeadContent, Scripts } from "@tanstack/react-router";
 import { createRootRoute, Outlet } from "@tanstack/react-router";
 import type { ReactNode } from "react";
-import { seo } from "../utils/seo";
+import { seo } from "../lib/seo";
+import appCss from "@/styles/app.css?url";
 
 //application root
 export const Route = createRootRoute({
   head: () => ({
     ...seo({ title: "Inventon", description: "Inventory Management" }),
+    links: [
+      {
+        rel: "stylesheet",
+        href: appCss,
+      },
+    ],
   }),
   component: RootComponent,
 });
