@@ -1,0 +1,20 @@
+{
+  "name": "inventon",
+  "version": "1.0.0",
+  "description": "inventory core",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vinxi dev",
+        "build": "vinxi build",
+        "start": "vinxi start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "japheth kiptoo",
+  "license": "ISC",
+  "dependencies": {
+    "@tanstack/react-router": "^1.109.2",
+    "@tanstack/start": "^1.111.2",
+    "vinxi": "^0.5.3"
+  }
+}
