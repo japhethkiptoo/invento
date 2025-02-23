@@ -20,7 +20,7 @@ export const Route = createRootRoute({
 
 function RootComponent() {
   return (
-    <RootDocument>
+    <RootDocument children={undefined}>
       <Outlet />
     </RootDocument>
   );
