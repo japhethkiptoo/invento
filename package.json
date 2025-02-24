@@ -8,13 +8,16 @@
     "dev": "vinxi dev",
     "build": "vinxi build",
     "start": "vinxi start",
+    "lint": "prettier --check .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "japheth kiptoo",
   "license": "ISC",
   "dependencies": {
+    "@radix-ui/react-label": "^2.1.2",
     "@radix-ui/react-slot": "^1.1.2",
     "@tailwindcss/postcss": "^4.0.8",
+    "@tanstack/react-form": "^0.43.2",
     "@tanstack/react-router": "^1.109.2",
     "@tanstack/start": "^1.111.2",
     "class-variance-authority": "^0.7.1",
@@ -27,7 +30,9 @@
     "vinxi": "^0.5.3"
   },
   "devDependencies": {
+    "@tanstack/router-devtools": "^1.109.2",
     "@types/react": "^19.0.10",
+    "prettier": "^3.5.2",
     "vite-tsconfig-paths": "^5.1.4"
   }
 }

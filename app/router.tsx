@@ -6,6 +6,9 @@ export function createRouter() {
   return createTanstackRouter({
     routeTree,
     scrollRestoration: true,
+    context: {
+      auth: false,
+    },
   });
 }
 
