@@ -11,11 +11,18 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as LogoutImport } from './routes/logout'
 import { Route as LoginImport } from './routes/login'
 import { Route as AuthedImport } from './routes/_authed'
 import { Route as AuthedIndexImport } from './routes/_authed/index'
 
 // Create/Update Routes
+
+const LogoutRoute = LogoutImport.update({
+  id: '/logout',
+  path: '/logout',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const LoginRoute = LoginImport.update({
   id: '/login',
@@ -52,6 +59,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
+    '/logout': {
+      id: '/logout'
+      path: '/logout'
+      fullPath: '/logout'
+      preLoaderRoute: typeof LogoutImport
+      parentRoute: typeof rootRoute
+    }
     '/_authed/': {
       id: '/_authed/'
       path: '/'
@@ -78,11 +92,13 @@ const AuthedRouteWithChildren =
 export interface FileRoutesByFullPath {
   '': typeof AuthedRouteWithChildren
   '/login': typeof LoginRoute
+  '/logout': typeof LogoutRoute
   '/': typeof AuthedIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
+  '/logout': typeof LogoutRoute
   '/': typeof AuthedIndexRoute
 }
 
@@ -90,26 +106,29 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/_authed': typeof AuthedRouteWithChildren
   '/login': typeof LoginRoute
+  '/logout': typeof LogoutRoute
   '/_authed/': typeof AuthedIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/login' | '/'
+  fullPaths: '' | '/login' | '/logout' | '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/login' | '/'
-  id: '__root__' | '/_authed' | '/login' | '/_authed/'
+  to: '/login' | '/logout' | '/'
+  id: '__root__' | '/_authed' | '/login' | '/logout' | '/_authed/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   AuthedRoute: typeof AuthedRouteWithChildren
   LoginRoute: typeof LoginRoute
+  LogoutRoute: typeof LogoutRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   AuthedRoute: AuthedRouteWithChildren,
   LoginRoute: LoginRoute,
+  LogoutRoute: LogoutRoute,
 }
 
 export const routeTree = rootRoute
@@ -123,7 +142,8 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/_authed",
-        "/login"
+        "/login",
+        "/logout"
       ]
     },
     "/_authed": {
@@ -134,6 +154,9 @@ export const routeTree = rootRoute
     },
     "/login": {
       "filePath": "login.tsx"
+    },
+    "/logout": {
+      "filePath": "logout.tsx"
     },
     "/_authed/": {
       "filePath": "_authed/index.tsx",

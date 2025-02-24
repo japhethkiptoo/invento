@@ -6,7 +6,15 @@ import { appConfig } from '@/config/app';
 import { AnyFieldApi, useForm } from '@tanstack/react-form';
 import { z } from 'zod';
 import { loginSchema } from '@/schemas/auth.schema';
-import { loginfn } from '@/core/http/auth/loginfn';
+import { loginFn } from '@/core/http/auth/loginfn';
+import { toast } from 'sonner';
+import {
+  redirect,
+  useNavigate,
+  useRouter,
+  useSearch,
+} from '@tanstack/react-router';
+import { useAppSession } from '@/lib/session';
 
 const FieldInfo = ({ field }: { field: AnyFieldApi }) => {
   return (
@@ -23,6 +31,10 @@ const FieldInfo = ({ field }: { field: AnyFieldApi }) => {
 };
 
 const LoginForm = () => {
+  const navigate = useNavigate();
+  const search = useSearch({ from: '/login' });
+  const router = useRouter();
+
   const form = useForm({
     defaultValues: {
       username: '',
@@ -31,14 +43,18 @@ const LoginForm = () => {
     validators: {
       onChange: loginSchema,
     },
-    onSubmit: ({ value }) => {
-      loginfn({ data: value })
-        .then((r) => {
-          console.log(r);
-        })
-        .catch((e) => {
-          console.error(e);
-        });
+    onSubmit: async ({ value }) => {
+      try {
+        const result = await loginFn({ data: value });
+        if (!result.success) {
+          toast.error(result.message);
+          return;
+        }
+        await router.invalidate();
+        navigate({ to: (search as any)?.redirect || '/' });
+      } catch (e) {
+        console.error(e);
+      }
     },
   });
 
