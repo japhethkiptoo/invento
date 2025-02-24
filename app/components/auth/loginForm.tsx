@@ -5,6 +5,8 @@ import { Input } from '../ui/input';
 import { appConfig } from '@/config/app';
 import { AnyFieldApi, useForm } from '@tanstack/react-form';
 import { z } from 'zod';
+import { loginSchema } from '@/schemas/auth.schema';
+import { loginfn } from '@/core/http/auth/loginfn';
 
 const FieldInfo = ({ field }: { field: AnyFieldApi }) => {
   return (
@@ -21,10 +23,6 @@ const FieldInfo = ({ field }: { field: AnyFieldApi }) => {
 };
 
 const LoginForm = () => {
-  const loginSchema = z.object({
-    username: z.string().min(1, 'Username is required'),
-    password: z.string().min(1, 'Password is required'),
-  });
   const form = useForm({
     defaultValues: {
       username: '',
@@ -33,8 +31,14 @@ const LoginForm = () => {
     validators: {
       onChange: loginSchema,
     },
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: ({ value }) => {
+      loginfn({ data: value })
+        .then((r) => {
+          console.log(r);
+        })
+        .catch((e) => {
+          console.error(e);
+        });
     },
   });
 
