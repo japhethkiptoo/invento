@@ -3,8 +3,41 @@ import { Button } from '../ui/button';
 import { Label } from '../ui/label';
 import { Input } from '../ui/input';
 import { appConfig } from '@/config/app';
+import { AnyFieldApi, useForm } from '@tanstack/react-form';
+import { z } from 'zod';
+
+const FieldInfo = ({ field }: { field: AnyFieldApi }) => {
+  return (
+    <>
+      {field.state.meta.isTouched && field.state.meta.errors.length ? (
+        <em className="text-sm text-red-500">
+          {JSON.stringify(
+            field.state.meta.errors.map((e) => e.message).join(',')
+          )}
+        </em>
+      ) : null}
+    </>
+  );
+};
 
 const LoginForm = () => {
+  const loginSchema = z.object({
+    username: z.string().min(1, 'Username is required'),
+    password: z.string().min(1, 'Password is required'),
+  });
+  const form = useForm({
+    defaultValues: {
+      username: '',
+      password: '',
+    },
+    validators: {
+      onChange: loginSchema,
+    },
+    onSubmit: (values) => {
+      console.log(values);
+    },
+  });
+
   return (
     <div className="flex flex-col gap-6">
       <div>
@@ -30,30 +63,65 @@ const LoginForm = () => {
           </div>
         </div>
 
-        <div className="flex flex-col gap-6">
+        <form
+          className="flex flex-col gap-6"
+          onSubmit={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            void form.handleSubmit();
+          }}
+        >
           <div className="grid gap-2">
-            <Label htmlFor="email">Username</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="m@example.com"
-              required
-            />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="email">Password</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="m@example.com"
-              required
+            <form.Field
+              name="username"
+              children={(field) => (
+                <>
+                  <Label htmlFor={field.name}>Username</Label>
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    type="text"
+                    placeholder="m@example.com"
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                  />
+                  <FieldInfo field={field} />
+                </>
+              )}
             />
           </div>
 
-          <Button type="submit" className="w-full">
-            Login
-          </Button>
-        </div>
+          <div className="grid gap-2">
+            <form.Field
+              name="password"
+              children={(field) => (
+                <>
+                  <Label htmlFor={field.name}>Password</Label>
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    type="password"
+                    placeholder="password"
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                  />
+                  <FieldInfo field={field} />
+                </>
+              )}
+            />
+          </div>
+
+          <form.Subscribe
+            selector={(state) => [state.canSubmit, state.isSubmitting]}
+            children={([canSubmit, isSubmitting]) => (
+              <Button type="submit" className="w-full" disabled={!canSubmit}>
+                {isSubmitting ? '...' : 'Login'}
+              </Button>
+            )}
+          />
+        </form>
       </div>
 
       <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
