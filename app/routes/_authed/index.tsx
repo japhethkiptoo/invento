@@ -9,10 +9,7 @@ export const Route = createFileRoute('/_authed/')({
 function RouteComponent() {
   return (
     <div>
-      <Button variant={'destructive'}>Click me</Button>
-      <Button asChild>
-        <Link to={'/logout'}>Logout</Link>
-      </Button>
+      <code>dashboard</code>
     </div>
   );
 }

@@ -15,6 +15,8 @@ import { Route as LogoutImport } from './routes/logout'
 import { Route as LoginImport } from './routes/login'
 import { Route as AuthedImport } from './routes/_authed'
 import { Route as AuthedIndexImport } from './routes/_authed/index'
+import { Route as AuthedProductsIndexImport } from './routes/_authed/products/index'
+import { Route as AuthedProductsCategoriesImport } from './routes/_authed/products/categories'
 
 // Create/Update Routes
 
@@ -38,6 +40,18 @@ const AuthedRoute = AuthedImport.update({
 const AuthedIndexRoute = AuthedIndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AuthedRoute,
+} as any)
+
+const AuthedProductsIndexRoute = AuthedProductsIndexImport.update({
+  id: '/products/',
+  path: '/products/',
+  getParentRoute: () => AuthedRoute,
+} as any)
+
+const AuthedProductsCategoriesRoute = AuthedProductsCategoriesImport.update({
+  id: '/products/categories',
+  path: '/products/categories',
   getParentRoute: () => AuthedRoute,
 } as any)
 
@@ -73,6 +87,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedIndexImport
       parentRoute: typeof AuthedImport
     }
+    '/_authed/products/categories': {
+      id: '/_authed/products/categories'
+      path: '/products/categories'
+      fullPath: '/products/categories'
+      preLoaderRoute: typeof AuthedProductsCategoriesImport
+      parentRoute: typeof AuthedImport
+    }
+    '/_authed/products/': {
+      id: '/_authed/products/'
+      path: '/products'
+      fullPath: '/products'
+      preLoaderRoute: typeof AuthedProductsIndexImport
+      parentRoute: typeof AuthedImport
+    }
   }
 }
 
@@ -80,10 +108,14 @@ declare module '@tanstack/react-router' {
 
 interface AuthedRouteChildren {
   AuthedIndexRoute: typeof AuthedIndexRoute
+  AuthedProductsCategoriesRoute: typeof AuthedProductsCategoriesRoute
+  AuthedProductsIndexRoute: typeof AuthedProductsIndexRoute
 }
 
 const AuthedRouteChildren: AuthedRouteChildren = {
   AuthedIndexRoute: AuthedIndexRoute,
+  AuthedProductsCategoriesRoute: AuthedProductsCategoriesRoute,
+  AuthedProductsIndexRoute: AuthedProductsIndexRoute,
 }
 
 const AuthedRouteWithChildren =
@@ -94,12 +126,16 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
   '/': typeof AuthedIndexRoute
+  '/products/categories': typeof AuthedProductsCategoriesRoute
+  '/products': typeof AuthedProductsIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
   '/': typeof AuthedIndexRoute
+  '/products/categories': typeof AuthedProductsCategoriesRoute
+  '/products': typeof AuthedProductsIndexRoute
 }
 
 export interface FileRoutesById {
@@ -108,14 +144,29 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/logout': typeof LogoutRoute
   '/_authed/': typeof AuthedIndexRoute
+  '/_authed/products/categories': typeof AuthedProductsCategoriesRoute
+  '/_authed/products/': typeof AuthedProductsIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/login' | '/logout' | '/'
+  fullPaths:
+    | ''
+    | '/login'
+    | '/logout'
+    | '/'
+    | '/products/categories'
+    | '/products'
   fileRoutesByTo: FileRoutesByTo
-  to: '/login' | '/logout' | '/'
-  id: '__root__' | '/_authed' | '/login' | '/logout' | '/_authed/'
+  to: '/login' | '/logout' | '/' | '/products/categories' | '/products'
+  id:
+    | '__root__'
+    | '/_authed'
+    | '/login'
+    | '/logout'
+    | '/_authed/'
+    | '/_authed/products/categories'
+    | '/_authed/products/'
   fileRoutesById: FileRoutesById
 }
 
@@ -149,7 +200,9 @@ export const routeTree = rootRoute
     "/_authed": {
       "filePath": "_authed.tsx",
       "children": [
-        "/_authed/"
+        "/_authed/",
+        "/_authed/products/categories",
+        "/_authed/products/"
       ]
     },
     "/login": {
@@ -160,6 +213,14 @@ export const routeTree = rootRoute
     },
     "/_authed/": {
       "filePath": "_authed/index.tsx",
+      "parent": "/_authed"
+    },
+    "/_authed/products/categories": {
+      "filePath": "_authed/products/categories.tsx",
+      "parent": "/_authed"
+    },
+    "/_authed/products/": {
+      "filePath": "_authed/products/index.tsx",
       "parent": "/_authed"
     }
   }
